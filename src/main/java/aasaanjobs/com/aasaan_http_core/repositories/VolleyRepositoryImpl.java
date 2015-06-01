@@ -35,20 +35,40 @@ import aasaanjobs.com.aasaan_http_core.models.BaseResponseDO;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by dineshsingh on 19/02/15.
+ *
+ * @param <P> the generic type
  */
 class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository implements VolleyRepository {
 
 
+    /** The Constant EXTRA_SOCKET_TIMEOUT_MS. */
     private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
+    
+    /** The Constant NUMBER_OF_RETRIES. */
     private static final int NUMBER_OF_RETRIES = 0;
+    
+    /** The Constant IMAGE_FILE. */
     private static final int IMAGE_FILE = 0;
+    
+    /** The Constant IMAGE_NAME. */
     private static final String IMAGE_NAME = "profile_pic";
+    
+    /** The default retry policy. */
     private final DefaultRetryPolicy defaultRetryPolicy;
+    
+    /** The url. */
     private String url;
 
 
+    /**
+     * Instantiates a new volley repository impl.
+     *
+     * @param context the context
+     * @param model the model
+     */
     public VolleyRepositoryImpl(Context context, BaseDO model) {
         setContext(context);
         url = "";
@@ -59,6 +79,11 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /**
+     * Gets the filename.
+     *
+     * @return the filename
+     */
     public static String getFilename() {
         File file = new File(Environment.getExternalStorageDirectory().getPath(), "AasaanJobs/Profile photos");
         if (!file.exists()) {
@@ -69,14 +94,23 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.AbstractRepository#getUrl()
+     */
     public String getUrl() {
         return url;
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.AbstractRepository#setUrl(java.lang.String)
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T> void get(Class<T> clazz, CustomRepoListener<T> listener) {
         setUrl(model.getGetURL());
@@ -87,6 +121,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#getList(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener)
+     */
     @Override
     public <T> void getList(final Class<T> clazz, final CustomRepoListListener<T> listener) {
 
@@ -115,6 +152,17 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(j);
     }
 
+    /**
+     * Gets the list from json array.
+     *
+     * @param <T> the generic type
+     * @param clazz the clazz
+     * @param response the response
+     * @param listener the listener
+     * @return the list from json array
+     * @throws JSONException the JSON exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private <T> List<T> getListFromJsonArray(Class<T> clazz, JSONArray response, CustomRepoListListener<T> listener) throws JSONException, IOException {
         List<T> t = new ArrayList<T>();
         int c = 0;
@@ -128,6 +176,15 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         return t;
     }
 
+    /**
+     * Gets the object from json object.
+     *
+     * @param <T> the generic type
+     * @param j the j
+     * @param clazz the clazz
+     * @return the object from json object
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private <T> T getObjectFromJsonObject(JSONObject j, Class<T> clazz) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         T t = null;
@@ -136,6 +193,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         return t;
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#post(Class, JSONObject, CustomRepoListener)
+     */
     @Override
     public <T> void post(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
 
@@ -172,6 +232,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    /**
+     * Dismiss progress dialogue.
+     */
     private void dismissProgressDialogue() {
         try {
             progressDialog.dismiss();
@@ -180,6 +243,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /**
+     * Initiate progress dialogue.
+     */
     private void initiateProgressDialogue() {
 
         try {
@@ -189,6 +255,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#post(Class, T, CustomRepoListener)
+     */
     @Override
     public <T> void post(Class<T> c, T request, CustomRepoListener<T> listener) {
 
@@ -205,6 +274,15 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /**
+     * Gets the JSON from object.
+     *
+     * @param <T> the generic type
+     * @param request the request
+     * @return the JSON from object
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JSONException the JSON exception
+     */
     private <T> JSONObject getJSONFromObject(T request) throws IOException, JSONException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
@@ -215,6 +293,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         return j;
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#put(Class, JSONObject, CustomRepoListener)
+     */
     @Override
     public <T> void put(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
 
@@ -248,6 +329,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#put(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener) {
 
@@ -270,7 +354,10 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 //
 //    }
 
-    @Override
+    /* (non-Javadoc)
+ * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, JSONObject, CustomRepoListener)
+ */
+@Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
         setUrl(model.getPatchURL());
 
@@ -306,6 +393,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 //        Volley.newRequestQueue(context, new OkHttpStack()).add(r);
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, T, CustomRepoListener)
+     */
     @Override
     public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener) {
         try {
@@ -319,6 +409,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#delete(Class, JSONObject, CustomRepoListener)
+     */
     @Override
     public <T> void delete(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener) {
         setUrl(model.getDeleteURL());
@@ -328,6 +421,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#delete(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener) {
         setUrl(model.getDeleteURL());
@@ -342,6 +438,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(Class, JSONObject, CustomRepoListener)
+     */
     @Override
     public <T> void get(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener) {
         setUrl(model.getGetURL());
@@ -352,6 +451,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#callMethodByRequestType(int, JSONObject, Class)
+     */
     @Override
     public <T> void callMethodByRequestType(final int requestType, JSONObject requestObject, final Class<T> clazz) {
 
@@ -380,6 +482,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#callMethodByRequestTypeAndSave(int, java.lang.Class, boolean)
+     */
     @Override
     public <T> void callMethodByRequestTypeAndSave(final int requestType, final Class<T> clazz, final boolean showLoadingDialogue) {
         if (showLoadingDialogue)
@@ -416,6 +521,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener, java.lang.String)
+     */
     @Override
     public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url) {
         setUrl(url);
@@ -425,6 +533,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#post(java.lang.Class, aasaanjobs.com.aasaan_http_core.models.BaseDO, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T extends BaseDO, P extends BaseResponseDO> void post(Class<P> c, T request, CustomRepoListener<P> listener) {
         setUrl(model.getPostURL());
@@ -443,6 +554,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#getString(aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener, java.lang.String)
+     */
     @Override
     public void getString(final CustomRepoListener<String> customRepoListener, String url) {
         CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -464,6 +578,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#uploadFile(java.lang.Class, java.io.File, java.lang.String, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T> void uploadFile(final Class<T> c, File file, String url, final CustomRepoListener<T> listener) {
         // initiateProgressDialogue();
@@ -485,6 +602,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#downloadFile(java.lang.String, int, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public void downloadFile(String url, int type, final CustomRepoListener<File> listener) {
         ImageRequest imageRequest = null;
@@ -505,6 +625,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /**
+     * Convert bitmap to file.
+     *
+     * @param response the response
+     * @param listener the listener
+     */
     private void convertBitmapToFile(Bitmap response, CustomRepoListener<File> listener) {
         //create a file to write bitmap data
 
@@ -537,6 +663,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#callMethodByRequestType(int, java.lang.Class)
+     */
     @Override
     public <T> void callMethodByRequestType(final int requestType, final Class<T> clazz) {
         initiateProgressDialogue();
@@ -572,6 +701,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     }
 
 
+    /**
+     * Send response.
+     *
+     * @param <T> the generic type
+     * @param response the response
+     * @param clazz the clazz
+     */
     private <T> void sendResponse(JSONObject response, Class<T> clazz) {
         ObjectMapper mapper = new ObjectMapper();
         T t = null;
@@ -586,6 +722,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /**
+     * Send object response.
+     *
+     * @param <T> the generic type
+     * @param response the response
+     * @param clazz the clazz
+     */
     private <T> void sendObjectResponse(JsonObject response, Class<T> clazz) {
         ObjectMapper mapper = new ObjectMapper();
         T t = null;
@@ -600,6 +743,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#getAndSave(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener, boolean)
+     */
     @Override
     public <T> void getAndSave(final Class<T> clazz, final CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         setUrl(model.getGetURL());
@@ -608,6 +754,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         callMethodByRequestTypeAndSave(Request.Method.GET, clazz, showLoadingDialogue);
     }
 
+    /* (non-Javadoc)
+     * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#getAndSave(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
+     */
     @Override
     public <T> void getAndSave(final Class<T> clazz, final CustomRepoListener<T> listener) {
         setUrl(model.getGetURL());

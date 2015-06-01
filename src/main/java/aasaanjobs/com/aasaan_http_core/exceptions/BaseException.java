@@ -1,5 +1,6 @@
 package aasaanjobs.com.aasaan_http_core.exceptions;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by dineshsingh on 19/02/15.
  */
@@ -58,7 +59,9 @@ public class BaseException extends Exception {
     }
 
     /**
-     * @param code
+     * Instantiates a new base exception.
+     *
+     * @param code the code
      */
     public BaseException(int code) {
         this.code = code;

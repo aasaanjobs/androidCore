@@ -21,17 +21,41 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MultiPartRequest.
+ */
 public class MultiPartRequest extends Request<JSONObject> {
 
 // private MultipartEntity entity = new MultipartEntity();
 
-    private static final String FILE_PART_NAME = "file";
+    /** The Constant FILE_PART_NAME. */
+private static final String FILE_PART_NAME = "file";
+    
+    /** The m listener. */
     private final Response.Listener<JSONObject> mListener;
+    
+    /** The m file part. */
     private final File mFilePart;
+    
+    /** The m string part. */
     private final Map<String, String> mStringPart;
+    
+    /** The entity. */
     MultipartEntityBuilder entity = MultipartEntityBuilder.create();
+    
+    /** The httpentity. */
     HttpEntity httpentity;
 
+    /**
+     * Instantiates a new multi part request.
+     *
+     * @param url the url
+     * @param errorListener the error listener
+     * @param listener the listener
+     * @param file the file
+     * @param mStringPart the m string part
+     */
     public MultiPartRequest(String url, Response.ErrorListener errorListener,
                             Response.Listener<JSONObject> listener, File file,
                             Map<String, String> mStringPart) {
@@ -44,10 +68,19 @@ public class MultiPartRequest extends Request<JSONObject> {
         buildMultipartEntity();
     }
 
+    /**
+     * Adds the string body.
+     *
+     * @param param the param
+     * @param value the value
+     */
     public void addStringBody(String param, String value) {
         mStringPart.put(param, value);
     }
 
+    /**
+     * Builds the multipart entity.
+     */
     private void buildMultipartEntity() {
         entity.addPart(FILE_PART_NAME, new FileBody(mFilePart));
         if (mStringPart != null) {
@@ -58,11 +91,22 @@ public class MultiPartRequest extends Request<JSONObject> {
     }
 
 
+    /**
+     * Gets the body content type.
+     *
+     * @return the body content type
+     */
     @Override
     public String getBodyContentType() {
         return httpentity.getContentType().getValue();
     }
 
+    /**
+     * Gets the body.
+     *
+     * @return the body
+     * @throws AuthFailureError the auth failure error
+     */
     @Override
     public byte[] getBody() throws AuthFailureError {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -75,6 +119,12 @@ public class MultiPartRequest extends Request<JSONObject> {
         return bos.toByteArray();
     }
 
+    /**
+     * Parses the network response.
+     *
+     * @param response the response
+     * @return the response
+     */
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
@@ -89,6 +139,11 @@ public class MultiPartRequest extends Request<JSONObject> {
         }
     }
 
+    /**
+     * Deliver response.
+     *
+     * @param response the response
+     */
     @Override
     protected void deliverResponse(JSONObject response) {
         mListener.onResponse(response);
