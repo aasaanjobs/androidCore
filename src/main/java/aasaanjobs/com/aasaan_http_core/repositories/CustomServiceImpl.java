@@ -233,6 +233,11 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         repository.uploadFile(c, file, url, listener);
     }
 
+    @Override
+    public <T> void uploadFile(Class<T> c, File file, String body, String url, CustomRepoListener<T> listener) {
+        repository.uploadFile(c, file, body, url, listener);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#downloadFile(java.lang.String, int, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */

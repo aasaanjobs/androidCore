@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -599,6 +600,29 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             }
         }, file, null);
         multiPartRequest.setRetryPolicy(defaultRetryPolicy);
+        VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
+    }
+
+    @Override
+    public <T> void uploadFile(final Class<T> c, File file, String body, String url, final CustomRepoListener<T> listener) {
+        // initiateProgressDialogue();
+        this.customRepoListener = listener;
+        MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dismissProgressDialogue();
+                listener.onError(error);
+            }
+        }, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                dismissProgressDialogue();
+                sendResponse(response, c);
+            }
+        }, file, null);
+        multiPartRequest.addStringBody(body);
+        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
+
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 

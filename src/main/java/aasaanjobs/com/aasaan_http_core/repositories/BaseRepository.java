@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.String;
 
 import aasaanjobs.com.aasaan_http_core.models.BaseDO;
 import aasaanjobs.com.aasaan_http_core.models.BaseResponseDO;
@@ -331,6 +332,8 @@ public interface BaseRepository {
      * @param listener the listener
      */
     <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener);
+
+    <T> void uploadFile(Class<T> c, File file, String body, String url, CustomRepoListener<T> listener);
 
     /**
      * Download file.

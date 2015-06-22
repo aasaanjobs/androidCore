@@ -183,6 +183,8 @@ public interface CustomService extends BaseService {
      */
     public <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener);
 
+    public <T> void uploadFile(Class<T> c, File file, String body, String url, CustomRepoListener<T> listener);
+
     /**
      * Download file.
      *
