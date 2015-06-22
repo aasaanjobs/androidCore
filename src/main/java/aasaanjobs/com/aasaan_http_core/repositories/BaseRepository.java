@@ -333,7 +333,7 @@ public interface BaseRepository {
      */
     <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener);
 
-    <T> void uploadFile(Class<T> c, File file, String body, String url, CustomRepoListener<T> listener);
+    <T> void uploadFile(Class<T> c, File file, String body,String param, String url, CustomRepoListener<T> listener);
 
     /**
      * Download file.

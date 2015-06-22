@@ -234,8 +234,8 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     }
 
     @Override
-    public <T> void uploadFile(Class<T> c, File file, String body, String url, CustomRepoListener<T> listener) {
-        repository.uploadFile(c, file, body, url, listener);
+    public <T> void uploadFile(Class<T> c, File file, String body, String param, String url, CustomRepoListener<T> listener) {
+        repository.uploadFile(c, file, body, param, url, listener);
     }
 
     /* (non-Javadoc)

@@ -604,7 +604,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, String body, String url, final CustomRepoListener<T> listener) {
+    public <T> void uploadFile(final Class<T> c, File file, String body, String param, String url, final CustomRepoListener<T> listener) {
         // initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -620,7 +620,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file, null);
-        multiPartRequest.addStringBody(body);
+        multiPartRequest.addStringBody(param,body);
         multiPartRequest.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
