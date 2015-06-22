@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import aasaanjobs.com.aasaan_http_core.models.BaseDO;
@@ -619,7 +620,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file, null);
+        }, file,new HashMap<String,String>());
         multiPartRequest.addStringBody(param,body);
         multiPartRequest.setRetryPolicy(defaultRetryPolicy);
 
