@@ -2,12 +2,12 @@ package aasaanjobs.com.aasaan_http_core.repositories;
 
 import android.content.Context;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import aasaanjobs.com.aasaan_http_core.models.BaseDO;
 import aasaanjobs.com.aasaan_http_core.models.BaseResponseDO;
@@ -15,18 +15,25 @@ import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * Created by dineshsingh on 19/02/15.
  */
 public class CustomServiceImpl extends AbstractService implements CustomService {
 
-    /** The context. */
+    /**
+     * The context.
+     */
     private Context context;
-    
-    /** The repository. */
+
+    /**
+     * The repository.
+     */
     private CustomRepository repository;
-    
-    /** The model. */
+
+    /**
+     * The model.
+     */
     private BaseDO model;
 
 
@@ -34,7 +41,7 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
      * Instantiates a new custom service impl.
      *
      * @param context the context
-     * @param model the model
+     * @param model   the model
      */
     public CustomServiceImpl(Context context, BaseDO model) {
         setContext(context);
@@ -234,8 +241,8 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     }
 
     @Override
-    public <T> void uploadFile(Class<T> c, File file, String body, String param, String url, CustomRepoListener<T> listener) {
-        repository.uploadFile(c, file, body, param, url, listener);
+    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener) {
+        repository.uploadFile(c, file, params, url, listener);
     }
 
     /* (non-Javadoc)
