@@ -336,6 +336,8 @@ public interface BaseRepository {
 
     <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener);
 
+    <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener);
+
     /**
      * Download file.
      *

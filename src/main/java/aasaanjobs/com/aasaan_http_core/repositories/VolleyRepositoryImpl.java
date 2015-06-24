@@ -48,19 +48,19 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     /** The Constant EXTRA_SOCKET_TIMEOUT_MS. */
     private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
-    
+
     /** The Constant NUMBER_OF_RETRIES. */
     private static final int NUMBER_OF_RETRIES = 0;
-    
+
     /** The Constant IMAGE_FILE. */
     private static final int IMAGE_FILE = 0;
-    
+
     /** The Constant IMAGE_NAME. */
     private static final String IMAGE_NAME = "profile_pic";
-    
+
     /** The default retry policy. */
     private final DefaultRetryPolicy defaultRetryPolicy;
-    
+
     /** The url. */
     private String url;
 
@@ -359,7 +359,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /* (non-Javadoc)
  * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, JSONObject, CustomRepoListener)
  */
-@Override
+    @Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
         setUrl(model.getPatchURL());
 
@@ -604,6 +604,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
+
     @Override
     public <T> void uploadFile(final Class<T> c, File file, HashMap<String,String> params, String url, final CustomRepoListener<T> listener) {
         // initiateProgressDialogue();
@@ -621,6 +622,28 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file,params);
+        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
+
+        VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
+    }
+
+    @Override
+    public <T> void uploadFile(final Class<T> c, File file, HashMap<String,String> params, String url,final CustomRepoListener<T> listener, long fileLength,MultiPartRequest.MultipartProgressListener progressListener) {
+        // initiateProgressDialogue();
+        this.customRepoListener = listener;
+        MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dismissProgressDialogue();
+                listener.onError(error);
+            }
+        }, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                dismissProgressDialogue();
+                sendResponse(response, c);
+            }
+        }, file,params, fileLength, progressListener);
         multiPartRequest.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
