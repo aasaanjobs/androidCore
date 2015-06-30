@@ -114,11 +114,29 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
+    public <T> void get(Class<T> clazz, CustomRepoListener<T> listener,boolean showLoadingDialogue ) {
+        setUrl(model.getGetURL());
+
+        setCustomRepoListener(listener);
+        callMethodByRequestType(Request.Method.GET, clazz, showLoadingDialogue);
+
+
+    }
+
+    @Override
+    public <T> void get(Class<T> clazz, String url, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        setUrl(model.getGetURL());
+
+        setCustomRepoListener(listener);
+        callMethodByRequestType(Request.Method.GET, clazz, showLoadingDialogue);
+    }
+
+    @Override
     public <T> void get(Class<T> clazz, CustomRepoListener<T> listener) {
         setUrl(model.getGetURL());
 
         setCustomRepoListener(listener);
-        callMethodByRequestType(Request.Method.GET, clazz);
+        callMethodByRequestType(Request.Method.GET, clazz, true);
 
 
     }
@@ -128,11 +146,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      */
     @Override
     public <T> void getList(final Class<T> clazz, final CustomRepoListListener<T> listener) {
-
+        initiateProgressDialogue();
         setUrl(model.getGetURL());
         JsonArrayRequest j = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                dismissProgressDialogue();
                 List<T> t = null;
                 try {
                     t = getListFromJsonArray(clazz, response, listener);
@@ -147,6 +166,40 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dismissProgressDialogue();
+                listener.onError(error);
+            }
+        });
+
+        VolleySingleton.getInstance(context).addToRequestQueue(j);
+    }
+
+    @Override
+    public <T> void getList(final Class<T> clazz, final CustomRepoListListener<T> listener, final boolean showLoadingDialogue) {
+        if(showLoadingDialogue)
+            initiateProgressDialogue();
+        setUrl(model.getGetURL());
+        JsonArrayRequest j = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                if(showLoadingDialogue)
+                    dismissProgressDialogue();
+                List<T> t = null;
+                try {
+                    t = getListFromJsonArray(clazz, response, listener);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    listener.onError(e);
+                }
+                listener.onSuccess(t);
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(showLoadingDialogue)
+                    dismissProgressDialogue();
                 listener.onError(error);
             }
         });
@@ -234,6 +287,42 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    @Override
+    public <T> void post(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
+        setUrl(model.getPostURL());
+        if(showLoadingDialogue)
+            initiateProgressDialogue();
+        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.POST, url, requestObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if(showLoadingDialogue)
+                    dismissProgressDialogue();
+                ObjectMapper mapper = new ObjectMapper();
+                T t = null;
+                try {
+                    t = mapper.readValue(response.toString(), clazz);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                listener.onSuccess(t);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (showLoadingDialogue)
+                    dismissProgressDialogue();
+
+
+                listener.onError(error);
+
+            }
+        });
+        r.setRetryPolicy(defaultRetryPolicy);
+
+        VolleySingleton.getInstance(context).addToRequestQueue(r);
+    }
+
     /**
      * Dismiss progress dialogue.
      */
@@ -274,6 +363,19 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             listener.onError(e);
         }
 
+    }
+
+    @Override
+    public <T> void post(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue){
+        try {
+            post(c, getJSONFromObject(request), listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
     }
 
     /**
@@ -331,6 +433,43 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    @Override
+    public <T> void put(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
+        setUrl(model.getPutURL());
+
+        if (showLoadingDialogue)
+            initiateProgressDialogue();
+
+        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PUT, url, requestObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (showLoadingDialogue)
+                    dismissProgressDialogue();
+                ObjectMapper mapper = new ObjectMapper();
+                T t = null;
+                try {
+                    t = mapper.readValue(response.toString(), clazz);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                listener.onSuccess(t);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (showLoadingDialogue)
+                    dismissProgressDialogue();
+
+                listener.onError(error);
+            }
+        });
+        r.setRetryPolicy(defaultRetryPolicy);
+        VolleySingleton.getInstance(context).addToRequestQueue(r);
+    }
+
+
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#put(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
@@ -349,6 +488,21 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             listener.onError(e);
         }
 
+    }
+
+    @Override
+    public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        setUrl(model.getPutURL());
+
+        try {
+            put(c, getJSONFromObject(request), listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
     }
 
 //    @Override
@@ -395,6 +549,45 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 //        Volley.newRequestQueue(context, new OkHttpStack()).add(r);
     }
 
+    @Override
+    public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
+        setUrl(model.getPatchURL());
+
+        if (showLoadingDialogue)
+            initiateProgressDialogue();
+        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (showLoadingDialogue)
+                    dismissProgressDialogue();
+                ObjectMapper mapper = new ObjectMapper();
+                T t = null;
+                try {
+                    t = mapper.readValue(response.toString(), clazz);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                listener.onSuccess(t);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (showLoadingDialogue)
+                    dismissProgressDialogue();
+
+
+                listener.onError(error);
+
+            }
+        });
+        r.setRetryPolicy(defaultRetryPolicy);
+
+        VolleySingleton.getInstance(context).addToRequestQueue(r);
+    }
+
+
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, T, CustomRepoListener)
      */
@@ -402,6 +595,19 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener) {
         try {
             patch(c, getJSONFromObject(request), listener);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) throws IOException, JSONException {
+        try {
+            patch(c, getJSONFromObject(request), listener, showLoadingDialogue);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -423,6 +629,15 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+    @Override
+    public <T> void delete(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        setUrl(model.getDeleteURL());
+        setCustomRepoListener(listener);
+        callMethodByRequestType(Request.Method.DELETE, requestObject, clazz, showLoadingDialogue);
+    }
+
+
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#delete(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
@@ -440,6 +655,32 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
+    @Override
+    public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        setUrl(model.getDeleteURL());
+        try {
+            delete(c, getJSONFromObject(request), listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void sendRequest(Class<T> clazz, String url, int requestType, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+
+    }
+
+    @Override
+    public <T> void sendRequest(Class<T> clazz, int requestType, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+
+    }
+
+
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(Class, JSONObject, CustomRepoListener)
      */
@@ -452,6 +693,16 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
 
     }
+
+    @Override
+    public <T> void get(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        setUrl(model.getGetURL());
+
+        setCustomRepoListener(listener);
+        callMethodByRequestType(Request.Method.GET, requestObject, clazz, true);
+    }
+
+
 
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#callMethodByRequestType(int, JSONObject, Class)
@@ -473,6 +724,36 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     dismissProgressDialogue();
+                    customRepoListener.onError(error);
+                }
+            });
+
+            r.setRetryPolicy(defaultRetryPolicy);
+            VolleySingleton.getInstance(context).addToRequestQueue(r);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public <T> void callMethodByRequestType(int requestType, JSONObject requestObject, final Class<T> clazz, final boolean showLoadingDialogue) {
+        if(showLoadingDialogue)
+            initiateProgressDialogue();
+        try {
+            CustomJsonObjectRequest r = new CustomJsonObjectRequest(requestType, url, requestObject, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if (showLoadingDialogue)
+                        dismissProgressDialogue();
+                    sendResponse(response, clazz);
+
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (showLoadingDialogue)
+                        dismissProgressDialogue();
                     customRepoListener.onError(error);
                 }
             });
@@ -527,11 +808,20 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener, java.lang.String)
      */
     @Override
+    public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url, boolean showLoadingDialogue) {
+        setUrl(url);
+
+        setCustomRepoListener(listener);
+        callMethodByRequestType(Request.Method.GET, c, showLoadingDialogue);
+
+    }
+
+    @Override
     public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url) {
         setUrl(url);
 
         setCustomRepoListener(listener);
-        callMethodByRequestType(Request.Method.GET, c);
+        callMethodByRequestType(Request.Method.GET, c, true);
 
     }
 
@@ -554,6 +844,23 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             listener.onError(e);
         }
 
+    }
+
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void post(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+        setUrl(model.getPostURL());
+        setCustomRepoListener(listener);
+        JSONObject requestObject = null;
+        try {
+            requestObject = getJSONFromObject(request);
+            callMethodByRequestType(Request.Method.POST, requestObject, c, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
     }
 
     /* (non-Javadoc)
@@ -580,23 +887,44 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
+    @Override
+    public void getString(final CustomRepoListener<String> customRepoListener, String url, boolean showLoadingDialogue) {
+        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ObjectMapper mapper = new ObjectMapper();
+
+                customRepoListener.onSuccess(response.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                customRepoListener.onError(error);
+
+            }
+        });
+        r.setRetryPolicy(defaultRetryPolicy);
+        VolleySingleton.getInstance(context).addToRequestQueue(r);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#uploadFile(java.lang.Class, java.io.File, java.lang.String, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
     public <T> void uploadFile(final Class<T> c, File file, String url, final CustomRepoListener<T> listener) {
-        // initiateProgressDialogue();
+//        initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 listener.onError(error);
             }
         }, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 sendResponse(response, c);
             }
         }, file, null);
@@ -612,13 +940,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 listener.onError(error);
             }
         }, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 sendResponse(response, c);
             }
         }, file,params);
@@ -634,13 +962,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 listener.onError(error);
             }
         }, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                dismissProgressDialogue();
+//                dismissProgressDialogue();
                 sendResponse(response, c);
             }
         }, file,params, fileLength, progressListener);
@@ -714,15 +1042,17 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#callMethodByRequestType(int, java.lang.Class)
      */
     @Override
-    public <T> void callMethodByRequestType(final int requestType, final Class<T> clazz) {
-        initiateProgressDialogue();
+    public <T> void callMethodByRequestType(final int requestType, final Class<T> clazz, final boolean showLoadingDialogue) {
+        if(showLoadingDialogue)
+            initiateProgressDialogue();
 
         try {
 
             CustomJsonObjectRequest r = new CustomJsonObjectRequest(requestType, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    dismissProgressDialogue();
+                    if(showLoadingDialogue)
+                        dismissProgressDialogue();
                     Log.i("", "");
                     //  context.getSharedPreferences("searchPref",0).edit().putString("searchResponse",response.toString()).commit();
                     sendResponse(response, clazz);
@@ -731,7 +1061,8 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    dismissProgressDialogue();
+                    if (showLoadingDialogue)
+                        dismissProgressDialogue();
 
                     customRepoListener.onError(error);
                 }

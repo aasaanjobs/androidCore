@@ -24,7 +24,7 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     /**
      * The context.
      */
-    private Context context;
+    protected Context context;
 
     /**
      * The repository.
@@ -85,12 +85,22 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
     }
 
+    @Override
+    public <T> void get(Class<T> c, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        repository.get(c, listener, showLoadingDialogue);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener, java.lang.String)
      */
     @Override
     public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url) {
         repository.get(c, listener, url);
+    }
+
+    @Override
+    public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url, boolean showLoadingDialogue) {
+        repository.get(c, listener, url, showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -101,12 +111,22 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         repository.get(c, requestObject, listener);
     }
 
+    @Override
+    public <T> void get(Class<T> c, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        repository.get(c, requestObject, listener, showLoadingDialogue);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#getList(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener)
      */
     @Override
     public <T> void getList(Class<T> c, CustomRepoListListener<T> listener) {
         repository.getList(c, listener);
+    }
+
+    @Override
+    public <T> void getList(Class<T> c, CustomRepoListListener<T> listener, boolean showLoadingDialogue) {
+        repository.getList(c, listener, showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -126,6 +146,20 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
     }
 
+    @Override
+    public <T> void add(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.post(c, request, listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
+    }
+
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#add(Class, JSONObject, CustomRepoListener)
      */
@@ -134,6 +168,15 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
         try {
             repository.post(c, request, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.post(c, request, listener, showLoadingDialogue);
         } catch (Exception e) {
             listener.onError(e);
         }
@@ -157,6 +200,19 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         }
     }
 
+    @Override
+    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.patch(c, request, listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#patch(Class, JSONObject, CustomRepoListener)
      */
@@ -164,6 +220,15 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener) {
         try {
             repository.patch(c, request, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.patch(c, request, listener, showLoadingDialogue);
         } catch (Exception e) {
             listener.onError(e);
         }
@@ -177,6 +242,15 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
         try {
             repository.post(c, request, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void add(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+        try {
+            repository.post(c, request, listener, showLoadingDialogue);
         } catch (Exception e) {
             listener.onError(e);
         }
@@ -196,8 +270,15 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
             listener.onError(e);
         }
+    }
 
-
+    @Override
+    public <T> void update(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.post(c, request, listener, showLoadingDialogue);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
     }
 
     /* (non-Javadoc)
@@ -206,6 +287,11 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     @Override
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener) {
         repository.delete(c, request, listener);
+    }
+
+    @Override
+    public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        repository.delete(c, request, listener,showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -230,6 +316,11 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     @Override
     public void getString(CustomRepoListener<String> customRepoListener, String url) {
         repository.getString(customRepoListener, url);
+    }
+
+    @Override
+    public void getString(CustomRepoListener<String> customRepoListener, String url, boolean showLoadingDialogue) {
+        repository.getString(customRepoListener, url, showLoadingDialogue);
     }
 
     /* (non-Javadoc)

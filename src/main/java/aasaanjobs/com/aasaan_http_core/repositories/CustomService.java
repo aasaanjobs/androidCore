@@ -36,6 +36,8 @@ public interface CustomService extends BaseService {
      */
     public <T> void get(Class<T> c, CustomRepoListener<T> listener);
 
+    public <T> void get(Class<T> c, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
     /**
      * Gets the.
      *
@@ -46,6 +48,8 @@ public interface CustomService extends BaseService {
      */
     public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url);
 
+    public <T> void get(Class<T> c, CustomRepoListener<T> listener, String url, boolean showLoadingDialogue);
+
     /**
      * Gets the.
      *
@@ -55,6 +59,7 @@ public interface CustomService extends BaseService {
      * @param listener      the listener
      */
     public <T> void get(Class<T> c, JSONObject requestObject, CustomRepoListener<T> listener);
+    public <T> void get(Class<T> c, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Gets the list.
@@ -65,6 +70,7 @@ public interface CustomService extends BaseService {
      * @return the list
      */
     public <T> void getList(Class<T> c, CustomRepoListListener<T> listener);
+    public <T> void getList(Class<T> c, CustomRepoListListener<T> listener, boolean showLoadingDialogue);
 
 
     //public <T > void add(Class<T> c, CustomRepoListener<T> listener);
@@ -78,6 +84,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void add(Class<T> c, T request, CustomRepoListener<T> listener);
+    public <T> void add(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Adds the.
@@ -88,6 +95,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener);
+    public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Patch.
@@ -98,6 +106,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener);
+    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Patch.
@@ -108,6 +117,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener);
+    public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialoguer);
 
     /**
      * Adds the.
@@ -119,6 +129,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T extends BaseDO, P extends BaseResponseDO> void add(Class<P> c, T request, CustomRepoListener<P> listener);
+    public <T extends BaseDO, P extends BaseResponseDO> void add(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue);
 
 
     //public <T > void update(Class<T> c, CustomRepoListener<T> listener);
@@ -132,6 +143,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void update(Class<T> c, T request, CustomRepoListener<T> listener);
+    public <T> void update(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Delete.
@@ -142,6 +154,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener);
+    public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     // public void getAndSave(Class<SearchDO> searchDOClass, CustomRepoListener<SearchDO> customRepoListener);
     //public <T > void delete(Class<T> c, CustomRepoListener<T> listener);
@@ -156,6 +169,7 @@ public interface CustomService extends BaseService {
      * @return the and save
      */
     public <T> void getAndSave(Class<T> clazz, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
 
     /**
      * Gets the and save.
@@ -175,6 +189,7 @@ public interface CustomService extends BaseService {
      * @return the string
      */
     void getString(CustomRepoListener<String> customRepoListener, String url);
+    void getString(CustomRepoListener<String> customRepoListener, String url,boolean showLoadingDialogue);
 
     /**
      * Upload file.

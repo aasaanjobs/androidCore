@@ -21,13 +21,13 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
 
     /** The model. */
     protected BaseDO model;
-    
+
     /** The url. */
     protected String url;
-    
+
     /** The custom repo listener. */
     protected CustomRepoListener customRepoListener;
-    
+
     /** The response class. */
     protected Class<T> responseClass;
 
@@ -55,7 +55,7 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
 
         setUrl(url);
         setCustomRepoListener(listener);
-        callMethodByRequestType(requestType, clazz);
+        callMethodByRequestType(requestType, clazz, true);
 
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
     @Override
     public <T> void sendRequest(Class<T> clazz, int requestType, CustomRepoListener<T> listener) {
         setCustomRepoListener(listener);
-        callMethodByRequestType(requestType, clazz);
+        callMethodByRequestType(requestType, clazz, true);
     }
 
     /* (non-Javadoc)
@@ -73,7 +73,12 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
      */
     @Override
     public <T> void sendRequest(Class<T> clazz, String url, int requestType) {
-        callMethodByRequestType(requestType, clazz);
+        callMethodByRequestType(requestType, clazz, true);
+    }
+
+    @Override
+    public <T> void sendRequest(Class<T> clazz, String url, int requestType, boolean showLoadingDialogue) {
+        callMethodByRequestType(requestType, clazz, showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -93,6 +98,11 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
 
     }
 
+    @Override
+    public <T> void getList(Class<T> clazz, String url, CustomRepoListListener<T> listener, boolean showLoadingDialogue) {
+        getList(clazz, listener, showLoadingDialogue);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#post(Class, String, JSONObject, CustomRepoListener)
      */
@@ -102,6 +112,10 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
         post(clazz, request, listener);
     }
 
+    @Override
+    public <T> void post(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        post(clazz, request, listener, showLoadingDialogue);
+    }
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#put(Class, String, JSONObject, CustomRepoListener)
      */
@@ -109,6 +123,11 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
     public <T> void put(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener) {
         put(clazz, request, listener);
 
+    }
+
+    @Override
+    public <T> void put(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        put(clazz, request, listener, showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -120,6 +139,11 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
 
     }
 
+    @Override
+    public <T> void patch(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        patch(clazz, request, listener, showLoadingDialogue);
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#delete(Class, String, JSONObject, CustomRepoListener)
      */
@@ -127,6 +151,11 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
     public <T> void delete(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener) {
 
         delete(clazz, request, listener);
+    }
+
+    @Override
+    public <T> void delete(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        delete(clazz, request, listener, showLoadingDialogue);
     }
 
     /**
@@ -187,31 +216,31 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
      * The Interface Method.
      */
     public interface Method {
-        
+
         /** The deprecated get or post. */
         int DEPRECATED_GET_OR_POST = -1;
-        
+
         /** The get. */
         int GET = 0;
-        
+
         /** The post. */
         int POST = 1;
-        
+
         /** The put. */
         int PUT = 2;
-        
+
         /** The delete. */
         int DELETE = 3;
-        
+
         /** The head. */
         int HEAD = 4;
-        
+
         /** The options. */
         int OPTIONS = 5;
-        
+
         /** The trace. */
         int TRACE = 6;
-        
+
         /** The patch. */
         int PATCH = 7;
     }
