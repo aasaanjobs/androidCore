@@ -20,29 +20,52 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseDO<T extends BasePayload> {
 
-    /** The url. */
+    /**
+     * The url.
+     */
     protected String url;
-    
-    /** The get url. */
+
+    /**
+     * The get url.
+     */
     protected String getURL;
-    
-    /** The put url. */
+
+    /**
+     * The put url.
+     */
     protected String putURL;
-    
-    /** The post url. */
+
+    /**
+     * The post url.
+     */
     protected String postURL;
-    
-    /** The patch url. */
+
+    /**
+     * The patch url.
+     */
     protected String patchURL;
-    
-    /** The delete url. */
+
+    /**
+     * The delete url.
+     */
     protected String deleteURL;
-    
-    /** The meta. */
+
+    /**
+     * The meta.
+     */
     protected MetaDO meta;
-    
-    /** The objects. */
+
+    /**
+     * The objects.
+     */
     protected List<T> objects;
+
+
+    /**
+     * Network response code;
+     */
+    private int responseCode;
+
 
     /**
      * Gets the objects.
@@ -204,5 +227,13 @@ public abstract class BaseDO<T extends BasePayload> {
      */
     public void setPatchURL(String patchURL) {
         this.patchURL = patchURL;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 }
