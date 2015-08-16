@@ -46,24 +46,14 @@ import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository implements VolleyRepository {
 
 
-    /** The Constant EXTRA_SOCKET_TIMEOUT_MS. */
-    private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
-
-    /** The Constant NUMBER_OF_RETRIES. */
-    private static final int NUMBER_OF_RETRIES = 0;
-
     /** The Constant IMAGE_FILE. */
     private static final int IMAGE_FILE = 0;
 
     /** The Constant IMAGE_NAME. */
     private static final String IMAGE_NAME = "profile_pic";
 
-    /** The default retry policy. */
-    private final DefaultRetryPolicy defaultRetryPolicy;
-
     /** The url. */
     private String url;
-
 
     /**
      * Instantiates a new volley repository impl.
@@ -77,7 +67,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         this.model = model;
 
         HttpsTrustManager.allowAllSSL();
-        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
     }
 
@@ -282,7 +271,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
@@ -318,7 +306,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
@@ -429,7 +416,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 listener.onError(error);
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -464,7 +450,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 listener.onError(error);
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -505,14 +490,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
-//    @Override
-//    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener) {
-//
-//    }
 
-    /* (non-Javadoc)
- * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, JSONObject, CustomRepoListener)
- */
     @Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
         setUrl(model.getPatchURL());
@@ -543,10 +521,8 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
-//        Volley.newRequestQueue(context, new OkHttpStack()).add(r);
     }
 
     @Override
@@ -581,7 +557,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
@@ -728,7 +703,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 }
             });
 
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception e) {
             e.printStackTrace();
@@ -758,7 +732,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 }
             });
 
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception e) {
             e.printStackTrace();
@@ -793,8 +766,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                     customRepoListener.onError(error);
                 }
             });
-
-            r.setRetryPolicy(defaultRetryPolicy);
 
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception E) {
@@ -883,7 +854,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -904,7 +874,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -928,7 +897,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file, null);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
@@ -950,7 +918,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file,params);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
@@ -972,7 +939,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file,params, fileLength, progressListener);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
@@ -1067,7 +1033,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                     customRepoListener.onError(error);
                 }
             });
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception E) {
             E.printStackTrace();

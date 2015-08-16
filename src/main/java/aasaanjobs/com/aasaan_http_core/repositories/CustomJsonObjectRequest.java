@@ -1,5 +1,6 @@
 package aasaanjobs.com.aasaan_http_core.repositories;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,6 +17,20 @@ import org.json.JSONObject;
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
     /**
+     * The Constant EXTRA_SOCKET_TIMEOUT_MS.
+     */
+    private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
+
+    /**
+     * The Constant NUMBER_OF_RETRIES.
+     */
+    private static final int NUMBER_OF_RETRIES = 0;
+    /**
+     * The default retry policy.
+     */
+    private final DefaultRetryPolicy defaultRetryPolicy;
+
+    /**
      * Instantiates a new custom json object request.
      *
      * @param method        the method
@@ -26,6 +41,8 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
      */
     public CustomJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
+        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setRetryPolicy(defaultRetryPolicy);
     }
 
     /**
@@ -38,6 +55,8 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
      */
     public CustomJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
+        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setRetryPolicy(defaultRetryPolicy);
     }
 
     /**
