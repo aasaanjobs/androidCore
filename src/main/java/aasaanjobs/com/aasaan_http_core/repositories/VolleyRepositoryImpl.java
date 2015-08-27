@@ -6,15 +6,12 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 
-
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.gson.JsonObject;
-
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
@@ -27,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,46 +34,47 @@ import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * Created by dineshsingh on 19/02/15.
  *
- * @param <P> the generic type
+ * @param <T> the generic type
  */
-class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository implements VolleyRepository {
+class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository implements VolleyRepository {
 
 
-    /** The Constant EXTRA_SOCKET_TIMEOUT_MS. */
-    private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
-
-    /** The Constant NUMBER_OF_RETRIES. */
-    private static final int NUMBER_OF_RETRIES = 0;
-
-    /** The Constant IMAGE_FILE. */
+    /**
+     * The Constant IMAGE_FILE.
+     */
     private static final int IMAGE_FILE = 0;
 
-    /** The Constant IMAGE_NAME. */
+    /**
+     * The Constant IMAGE_NAME.
+     */
     private static final String IMAGE_NAME = "profile_pic";
 
-    /** The default retry policy. */
-    private final DefaultRetryPolicy defaultRetryPolicy;
-
-    /** The url. */
+    /**
+     * The url.
+     */
     private String url;
 
+    /**
+     * The model.
+     */
+    protected T model;
 
     /**
      * Instantiates a new volley repository impl.
      *
      * @param context the context
-     * @param model the model
+     * @param model   the model
      */
-    public VolleyRepositoryImpl(Context context, BaseDO model) {
+    public VolleyRepositoryImpl(Context context, T model) {
         setContext(context);
         url = "";
         this.model = model;
 
         HttpsTrustManager.allowAllSSL();
-        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
     }
 
@@ -114,7 +111,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(java.lang.Class, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
-    public <T> void get(Class<T> clazz, CustomRepoListener<T> listener,boolean showLoadingDialogue ) {
+    public <T> void get(Class<T> clazz, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         setUrl(model.getGetURL());
 
         setCustomRepoListener(listener);
@@ -176,13 +173,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     @Override
     public <T> void getList(final Class<T> clazz, final CustomRepoListListener<T> listener, final boolean showLoadingDialogue) {
-        if(showLoadingDialogue)
+        if (showLoadingDialogue)
             initiateProgressDialogue();
         setUrl(model.getGetURL());
         JsonArrayRequest j = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                if(showLoadingDialogue)
+                if (showLoadingDialogue)
                     dismissProgressDialogue();
                 List<T> t = null;
                 try {
@@ -198,7 +195,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(showLoadingDialogue)
+                if (showLoadingDialogue)
                     dismissProgressDialogue();
                 listener.onError(error);
             }
@@ -210,13 +207,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /**
      * Gets the list from json array.
      *
-     * @param <T> the generic type
-     * @param clazz the clazz
+     * @param <T>      the generic type
+     * @param clazz    the clazz
      * @param response the response
      * @param listener the listener
      * @return the list from json array
      * @throws JSONException the JSON exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException   Signals that an I/O exception has occurred.
      */
     private <T> List<T> getListFromJsonArray(Class<T> clazz, JSONArray response, CustomRepoListListener<T> listener) throws JSONException, IOException {
         List<T> t = new ArrayList<T>();
@@ -234,8 +231,8 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /**
      * Gets the object from json object.
      *
-     * @param <T> the generic type
-     * @param j the j
+     * @param <T>   the generic type
+     * @param j     the j
      * @param clazz the clazz
      * @return the object from json object
      * @throws IOException Signals that an I/O exception has occurred.
@@ -282,7 +279,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
@@ -290,12 +286,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     @Override
     public <T> void post(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
         setUrl(model.getPostURL());
-        if(showLoadingDialogue)
+        if (showLoadingDialogue)
             initiateProgressDialogue();
         CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.POST, url, requestObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                if(showLoadingDialogue)
+                if (showLoadingDialogue)
                     dismissProgressDialogue();
                 ObjectMapper mapper = new ObjectMapper();
                 T t = null;
@@ -318,7 +314,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
@@ -366,7 +361,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T> void post(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue){
+    public <T> void post(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         try {
             post(c, getJSONFromObject(request), listener, showLoadingDialogue);
         } catch (IOException e) {
@@ -381,10 +376,10 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /**
      * Gets the JSON from object.
      *
-     * @param <T> the generic type
+     * @param <T>     the generic type
      * @param request the request
      * @return the JSON from object
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException   Signals that an I/O exception has occurred.
      * @throws JSONException the JSON exception
      */
     private <T> JSONObject getJSONFromObject(T request) throws IOException, JSONException {
@@ -429,7 +424,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 listener.onError(error);
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -464,10 +458,8 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 listener.onError(error);
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
-
 
 
     /* (non-Javadoc)
@@ -505,14 +497,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         }
     }
 
-//    @Override
-//    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener) {
-//
-//    }
 
-    /* (non-Javadoc)
- * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, JSONObject, CustomRepoListener)
- */
     @Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
         setUrl(model.getPatchURL());
@@ -526,11 +511,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 T t = null;
                 try {
                     t = mapper.readValue(response.toString(), clazz);
-                } catch (IOException e) {
+                    listener.onSuccess(t);
+                } catch (Exception e) {
                     e.printStackTrace();
+                    listener.onError(e);
                 }
 
-                listener.onSuccess(t);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -543,10 +529,8 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
-//        Volley.newRequestQueue(context, new OkHttpStack()).add(r);
     }
 
     @Override
@@ -564,11 +548,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 T t = null;
                 try {
                     t = mapper.readValue(response.toString(), clazz);
-                } catch (IOException e) {
+                    listener.onSuccess(t);
+                } catch (Exception e) {
                     e.printStackTrace();
+                    listener.onError(e);
                 }
 
-                listener.onSuccess(t);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -581,11 +566,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
-
 
 
     /* (non-Javadoc)
@@ -637,7 +620,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     }
 
 
-
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#delete(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
@@ -680,7 +662,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     }
 
 
-
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#get(Class, JSONObject, CustomRepoListener)
      */
@@ -701,7 +682,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
         setCustomRepoListener(listener);
         callMethodByRequestType(Request.Method.GET, requestObject, clazz, true);
     }
-
 
 
     /* (non-Javadoc)
@@ -728,7 +708,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 }
             });
 
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception e) {
             e.printStackTrace();
@@ -737,7 +716,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
     @Override
     public <T> void callMethodByRequestType(int requestType, JSONObject requestObject, final Class<T> clazz, final boolean showLoadingDialogue) {
-        if(showLoadingDialogue)
+        if (showLoadingDialogue)
             initiateProgressDialogue();
         try {
             CustomJsonObjectRequest r = new CustomJsonObjectRequest(requestType, url, requestObject, new Response.Listener<JSONObject>() {
@@ -758,7 +737,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 }
             });
 
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception e) {
             e.printStackTrace();
@@ -793,8 +771,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                     customRepoListener.onError(error);
                 }
             });
-
-            r.setRetryPolicy(defaultRetryPolicy);
 
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception E) {
@@ -883,7 +859,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -904,7 +879,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 
             }
         });
-        r.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
@@ -928,13 +902,12 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                 sendResponse(response, c);
             }
         }, file, null);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
 
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, HashMap<String,String> params, String url, final CustomRepoListener<T> listener) {
+    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener) {
         // initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -949,14 +922,13 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 //                dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file,params);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
+        }, file, params);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, HashMap<String,String> params, String url,final CustomRepoListener<T> listener, long fileLength,MultiPartRequest.MultipartProgressListener progressListener) {
+    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener) {
         // initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -971,8 +943,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
 //                dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file,params, fileLength, progressListener);
-        multiPartRequest.setRetryPolicy(defaultRetryPolicy);
+        }, file, params, fileLength, progressListener);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
@@ -1043,7 +1014,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
      */
     @Override
     public <T> void callMethodByRequestType(final int requestType, final Class<T> clazz, final boolean showLoadingDialogue) {
-        if(showLoadingDialogue)
+        if (showLoadingDialogue)
             initiateProgressDialogue();
 
         try {
@@ -1051,7 +1022,7 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
             CustomJsonObjectRequest r = new CustomJsonObjectRequest(requestType, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    if(showLoadingDialogue)
+                    if (showLoadingDialogue)
                         dismissProgressDialogue();
                     Log.i("", "");
                     //  context.getSharedPreferences("searchPref",0).edit().putString("searchResponse",response.toString()).commit();
@@ -1067,7 +1038,6 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
                     customRepoListener.onError(error);
                 }
             });
-            r.setRetryPolicy(defaultRetryPolicy);
             VolleySingleton.getInstance(context).addToRequestQueue(r);
         } catch (Exception E) {
             E.printStackTrace();
@@ -1082,9 +1052,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /**
      * Send response.
      *
-     * @param <T> the generic type
+     * @param <T>      the generic type
      * @param response the response
-     * @param clazz the clazz
+     * @param clazz    the clazz
      */
     private <T> void sendResponse(JSONObject response, Class<T> clazz) {
         ObjectMapper mapper = new ObjectMapper();
@@ -1103,9 +1073,9 @@ class VolleyRepositoryImpl<P extends BaseDO> extends AbstractCustomRepository im
     /**
      * Send object response.
      *
-     * @param <T> the generic type
+     * @param <T>      the generic type
      * @param response the response
-     * @param clazz the clazz
+     * @param clazz    the clazz
      */
     private <T> void sendObjectResponse(JsonObject response, Class<T> clazz) {
         ObjectMapper mapper = new ObjectMapper();

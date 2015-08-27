@@ -1,6 +1,7 @@
 package aasaanjobs.com.aasaan_http_core.repositories;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -28,34 +29,60 @@ public class MultiPartRequest extends Request<JSONObject> {
 
 // private MultipartEntity entity = new MultipartEntity();
 
-    /** The Constant FILE_PART_NAME. */
+    /**
+     * The Constant FILE_PART_NAME.
+     */
     private static final String FILE_PART_NAME = "file";
 
-    /** The m listener. */
+    /**
+     * The m listener.
+     */
     private final Response.Listener<JSONObject> mListener;
 
-    /** The m file part. */
+    /**
+     * The m file part.
+     */
     private final File mFilePart;
     private long fileLength = 0L;
 
     private MultipartProgressListener multipartProgressListener;
-    /** The m string part. */
+    /**
+     * The m string part.
+     */
     private final Map<String, String> mStringPart;
 
-    /** The entity. */
+    /**
+     * The entity.
+     */
     MultipartEntityBuilder entity = MultipartEntityBuilder.create();
 
-    /** The httpentity. */
+    /**
+     * The httpentity.
+     */
     HttpEntity httpentity;
+
+    /**
+     * The Constant EXTRA_SOCKET_TIMEOUT_MS.
+     */
+    private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
+
+    /**
+     * The Constant NUMBER_OF_RETRIES.
+     */
+    private static final int NUMBER_OF_RETRIES = 0;
+    /**
+     * The default retry policy.
+     */
+    private final DefaultRetryPolicy defaultRetryPolicy;
 
     /**
      * Instantiates a new multi part request.
      *
-     * @param url the url
+     * @param url           the url
      * @param errorListener the error listener
-     * @param listener the listener
-     * @param file the file
-     * @param mStringPart the m string part
+     * @param listener      the listener
+     * @param file          the file
+     * @param mStringPart   the m string part
      */
     public MultiPartRequest(String url, Response.ErrorListener errorListener,
                             Response.Listener<JSONObject> listener, File file,
@@ -67,23 +94,26 @@ public class MultiPartRequest extends Request<JSONObject> {
         this.mStringPart = mStringPart;
         entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         buildMultipartEntity();
+        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setRetryPolicy(defaultRetryPolicy);
     }
 
-    public  MultiPartRequest(String url, Response.ErrorListener errorListener,
-                             Response.Listener<JSONObject> listener, File file,
-                             Map<String, String> mStringPart,long fileLength,MultipartProgressListener progressListner){
+    public MultiPartRequest(String url, Response.ErrorListener errorListener,
+                            Response.Listener<JSONObject> listener, File file,
+                            Map<String, String> mStringPart, long fileLength, MultipartProgressListener progressListner) {
 
         super(Method.POST, url, errorListener);
 
         mListener = listener;
         mFilePart = file;
         this.mStringPart = mStringPart;
-        this.multipartProgressListener=progressListner;
-        this.fileLength=fileLength;
+        this.multipartProgressListener = progressListner;
+        this.fileLength = fileLength;
         entity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         buildMultipartEntity();
+        defaultRetryPolicy = new DefaultRetryPolicy(EXTRA_SOCKET_TIMEOUT_MS, NUMBER_OF_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        setRetryPolicy(defaultRetryPolicy);
     }
-
 
 
     /**
@@ -133,10 +163,10 @@ public class MultiPartRequest extends Request<JSONObject> {
         try {
             httpentity = entity.build();
 
-            if(multipartProgressListener!=null) {
+            if (multipartProgressListener != null) {
                 httpentity.writeTo(new CountingOutputStream(bos, fileLength,
                         multipartProgressListener));
-            }else {
+            } else {
                 httpentity.writeTo(bos);
             }
         } catch (IOException e) {

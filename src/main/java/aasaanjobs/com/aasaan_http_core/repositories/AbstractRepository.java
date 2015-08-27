@@ -6,7 +6,6 @@ import android.content.Context;
 
 import org.json.JSONObject;
 
-import aasaanjobs.com.aasaan_http_core.models.BaseDO;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
@@ -14,13 +13,9 @@ import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 /**
  * Created by dineshsingh on 19/02/15.
  *
- * @param <T> the generic type
  */
-public abstract class AbstractRepository<T extends BaseDO> implements BaseRepository {
+public abstract class AbstractRepository implements BaseRepository {
 
-
-    /** The model. */
-    protected BaseDO model;
 
     /** The url. */
     protected String url;
@@ -28,8 +23,6 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
     /** The custom repo listener. */
     protected CustomRepoListener customRepoListener;
 
-    /** The response class. */
-    protected Class<T> responseClass;
 
     /** The progress dialog. */
     protected ProgressDialog progressDialog;
@@ -156,24 +149,6 @@ public abstract class AbstractRepository<T extends BaseDO> implements BaseReposi
     @Override
     public <T> void delete(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         delete(clazz, request, listener, showLoadingDialogue);
-    }
-
-    /**
-     * Gets the response class.
-     *
-     * @return the response class
-     */
-    public Class<T> getResponseClass() {
-        return responseClass;
-    }
-
-    /**
-     * Sets the response class.
-     *
-     * @param responseClass the new response class
-     */
-    public void setResponseClass(Class<T> responseClass) {
-        this.responseClass = responseClass;
     }
 
     /**
