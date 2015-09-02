@@ -19,7 +19,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     /**
      * The Constant EXTRA_SOCKET_TIMEOUT_MS.
      */
-    private static final int EXTRA_SOCKET_TIMEOUT_MS = 15000;
+    private static final int EXTRA_SOCKET_TIMEOUT_MS = 60000;
 
     /**
      * The Constant NUMBER_OF_RETRIES.

@@ -47,7 +47,10 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         setContext(context);
         this.model = model;
         this.repository = new VolleyRepositoryImpl(context, model);
+        repository.setHeaders(CustomHeaders.headers);
     }
+
+
 
 
     /**

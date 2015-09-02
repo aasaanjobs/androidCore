@@ -78,6 +78,8 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 
     }
 
+
+
     /**
      * Gets the filename.
      *
@@ -1111,5 +1113,12 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 
         setCustomRepoListener(listener);
         callMethodByRequestTypeAndSave(Request.Method.GET, clazz, true);
+    }
+
+    @Override
+    public void setHeaders(HashMap<String, String> headers) {
+        if(headers!=null){
+            VolleySingleton.getInstance(context).setHeaders(headers);
+        }
     }
 }

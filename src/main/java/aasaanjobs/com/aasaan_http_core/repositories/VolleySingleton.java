@@ -4,28 +4,42 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
+
 // TODO: Auto-generated Javadoc
+
 /**
  * Created by dineshsingh on 21/02/15.
  */
 public class VolleySingleton {
 
-    /** The m instance. */
+    /**
+     * The m instance.
+     */
     private static volatile VolleySingleton mInstance;
-    
-    /** The m ctx. */
+
+    /**
+     * The m ctx.
+     */
     private static Context mCtx;
-    
-    /** The m request queue. */
+
+    /**
+     * The m request queue.
+     */
     private RequestQueue mRequestQueue;
-    
-    /** The m image loader. */
+
+    /**
+     * The m image loader.
+     */
     private ImageLoader mImageLoader;
+
+    private HashMap<String,String> headers;
 
     /**
      * Instantiates a new volley singleton.
@@ -91,6 +105,13 @@ public class VolleySingleton {
      * @param req the req
      */
     public <T> void addToRequestQueue(Request<T> req) {
+
+        try {
+            req.getHeaders().putAll(headers);
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+
+        }
         getRequestQueue().add(req);
     }
 
@@ -101,6 +122,10 @@ public class VolleySingleton {
      */
     public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+
+    public void setHeaders(HashMap<String, String> headers) {
+        this.headers = headers;
     }
 }
 
