@@ -1,5 +1,6 @@
 package aasaanjobs.com.aasaan_http_core.repositories;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -8,6 +9,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 
@@ -99,5 +102,11 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         return networkResponse;
     }
 
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        if (!CustomHeaders.getHeaders().isEmpty())
+            return CustomHeaders.getHeaders();
+        return super.getHeaders();
+    }
 }
 

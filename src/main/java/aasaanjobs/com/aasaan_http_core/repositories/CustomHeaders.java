@@ -7,5 +7,9 @@ import java.util.HashMap;
  */
 public class CustomHeaders {
 
-    public static HashMap<String, String> headers;
+    private final static HashMap<String, String> headers = new HashMap<>();
+
+    public static HashMap<String, String> getHeaders() {
+        return headers;
+    }
 }

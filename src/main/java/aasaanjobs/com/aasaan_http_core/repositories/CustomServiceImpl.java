@@ -47,10 +47,7 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         setContext(context);
         this.model = model;
         this.repository = new VolleyRepositoryImpl(context, model);
-        repository.setHeaders(CustomHeaders.headers);
     }
-
-
 
 
     /**
@@ -237,6 +234,24 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         }
     }
 
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener) {
+        try {
+            repository.patch(c, request, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+        try {
+            repository.patch(c, request, listener, showLoadingDialogue);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#add(java.lang.Class, aasaanjobs.com.aasaan_http_core.models.BaseDO, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
@@ -294,7 +309,7 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
 
     @Override
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
-        repository.delete(c, request, listener,showLoadingDialogue);
+        repository.delete(c, request, listener, showLoadingDialogue);
     }
 
     /* (non-Javadoc)
@@ -340,7 +355,7 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     }
 
     @Override
-    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength,MultiPartRequest.MultipartProgressListener progressListener) {
+    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener) {
         repository.uploadFile(c, file, params, url, listener, fileLength, progressListener);
     }
 

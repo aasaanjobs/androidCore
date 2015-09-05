@@ -79,7 +79,6 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
     }
 
 
-
     /**
      * Gets the filename.
      *
@@ -570,6 +569,32 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         });
 
         VolleySingleton.getInstance(context).addToRequestQueue(r);
+    }
+
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener) {
+        try {
+            patch(c, getJSONFromObject(request), listener);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+        try {
+            patch(c, getJSONFromObject(request), listener, showLoadingDialogue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onError(e);
+        }
     }
 
 
@@ -1115,10 +1140,5 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         callMethodByRequestTypeAndSave(Request.Method.GET, clazz, true);
     }
 
-    @Override
-    public void setHeaders(HashMap<String, String> headers) {
-        if(headers!=null){
-            VolleySingleton.getInstance(context).setHeaders(headers);
-        }
-    }
+
 }

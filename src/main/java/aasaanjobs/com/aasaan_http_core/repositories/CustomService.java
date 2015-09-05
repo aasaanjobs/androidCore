@@ -59,6 +59,7 @@ public interface CustomService extends BaseService {
      * @param listener      the listener
      */
     public <T> void get(Class<T> c, JSONObject requestObject, CustomRepoListener<T> listener);
+
     public <T> void get(Class<T> c, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -70,6 +71,7 @@ public interface CustomService extends BaseService {
      * @return the list
      */
     public <T> void getList(Class<T> c, CustomRepoListListener<T> listener);
+
     public <T> void getList(Class<T> c, CustomRepoListListener<T> listener, boolean showLoadingDialogue);
 
 
@@ -84,6 +86,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void add(Class<T> c, T request, CustomRepoListener<T> listener);
+
     public <T> void add(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -95,6 +98,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener);
+
     public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -106,6 +110,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener);
+
     public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -117,7 +122,12 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener);
+
     public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialoguer);
+
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener);
+
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue);
 
     /**
      * Adds the.
@@ -129,6 +139,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T extends BaseDO, P extends BaseResponseDO> void add(Class<P> c, T request, CustomRepoListener<P> listener);
+
     public <T extends BaseDO, P extends BaseResponseDO> void add(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue);
 
 
@@ -143,6 +154,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void update(Class<T> c, T request, CustomRepoListener<T> listener);
+
     public <T> void update(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -154,6 +166,7 @@ public interface CustomService extends BaseService {
      * @param listener the listener
      */
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener);
+
     public <T> void delete(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     // public void getAndSave(Class<SearchDO> searchDOClass, CustomRepoListener<SearchDO> customRepoListener);
@@ -189,7 +202,8 @@ public interface CustomService extends BaseService {
      * @return the string
      */
     void getString(CustomRepoListener<String> customRepoListener, String url);
-    void getString(CustomRepoListener<String> customRepoListener, String url,boolean showLoadingDialogue);
+
+    void getString(CustomRepoListener<String> customRepoListener, String url, boolean showLoadingDialogue);
 
     /**
      * Upload file.
@@ -204,7 +218,7 @@ public interface CustomService extends BaseService {
 
     public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener);
 
-    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength,MultiPartRequest.MultipartProgressListener progressListener);
+    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener);
 
     /**
      * Download file.

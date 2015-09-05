@@ -88,7 +88,7 @@ public interface BaseRepository {
      */
     public <T> void getList(Class<T> clazz, CustomRepoListListener<T> listener);
 
-    public <T> void getList(Class<T> clazz, CustomRepoListListener<T> listener,  boolean showLoadingDialogue);
+    public <T> void getList(Class<T> clazz, CustomRepoListListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Post.
@@ -163,6 +163,7 @@ public interface BaseRepository {
      * @param listener the listener
      */
     public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener);
+
     public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
@@ -189,6 +190,10 @@ public interface BaseRepository {
     public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener);
 
     public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener);
+
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue);
 
     /**
      * Patch.
@@ -288,6 +293,7 @@ public interface BaseRepository {
      * @param clazz         the clazz
      */
     public <T> void callMethodByRequestType(final int requestType, JSONObject requestObject, final Class<T> clazz);
+
     public <T> void callMethodByRequestType(final int requestType, JSONObject requestObject, final Class<T> clazz, boolean showLoadingDialogue);
 
     /**
