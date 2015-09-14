@@ -69,6 +69,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
      * @param context the context
      * @param model   the model
      */
+
+    protected boolean showLoader = false;
+
     public VolleyRepositoryImpl(Context context, T model) {
         setContext(context);
         url = "";
@@ -134,7 +137,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         setUrl(model.getGetURL());
 
         setCustomRepoListener(listener);
-        callMethodByRequestType(Request.Method.GET, clazz, true);
+        callMethodByRequestType(Request.Method.GET, clazz, showLoader);
 
 
     }
@@ -707,7 +710,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         setUrl(model.getGetURL());
 
         setCustomRepoListener(listener);
-        callMethodByRequestType(Request.Method.GET, requestObject, clazz, true);
+        callMethodByRequestType(Request.Method.GET, requestObject, clazz, showLoadingDialogue);
     }
 
 
@@ -824,7 +827,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         setUrl(url);
 
         setCustomRepoListener(listener);
-        callMethodByRequestType(Request.Method.GET, c, true);
+        callMethodByRequestType(Request.Method.GET, c, showLoader);
 
     }
 
@@ -1137,7 +1140,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         setUrl(model.getGetURL());
 
         setCustomRepoListener(listener);
-        callMethodByRequestTypeAndSave(Request.Method.GET, clazz, true);
+        callMethodByRequestTypeAndSave(Request.Method.GET, clazz, showLoader);
     }
 
 
