@@ -33,6 +33,7 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
 
     private final CustomRepoListener<T> customRepoListener;
     private Class<T> clazz;
+    private boolean isSuccesfull = false;
 
     public PatchTask(CustomRepoListener repoListener, Class<T> clazz) {
         this.customRepoListener = repoListener;
@@ -76,6 +77,7 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
             if (response != null) {
                 int responseCode = response.getStatusLine().getStatusCode();
                 if (responseCode == 202 || responseCode == 200) {
+                    isSuccesfull = true;
                     try {
                         final String responseText = EntityUtils.toString(response.getEntity());
                         ObjectMapper mapper = new ObjectMapper();
@@ -83,11 +85,9 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
                         t = mapper.readValue(responseText, clazz);
                         return t;
                     } catch (IOException e) {
-                        customRepoListener.onError(new Exception("Json Mapping : Error converting object"));
                         e.printStackTrace();
                     }
                 }
-
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -99,30 +99,10 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
 
     @Override
     protected void onPostExecute(T response) {
-        if (response != null) {
+        if (isSuccesfull) {
             customRepoListener.onSuccess(response);
         } else {
             customRepoListener.onError(new Exception("Response object null"));
         }
-//        if (response != null) {
-//            int responseCode = response.getStatusLine().getStatusCode();
-//            if (responseCode == 202 || responseCode == 200) {
-//                try {
-//                    final String responseText = EntityUtils.toString(response.getEntity());
-//                    ObjectMapper mapper = new ObjectMapper();
-//                    T t = null;
-//                    t = mapper.readValue(responseText, clazz);
-//                    customRepoListener.onSuccess(t);
-//                } catch (IOException e) {
-//                    customRepoListener.onError(new Exception("Json Mapping : Error converting object"));
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                //TODO : handle all response codes
-//                customRepoListener.onError(new Exception("Invalid Response Code"));
-//            }
-//        } else {
-//            customRepoListener.onError(new Exception("PatchTask : ClientProtocolException / IOException"));
-//        }
     }
 }
