@@ -504,74 +504,76 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 
     @Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
-        setUrl(model.getPatchURL());
-
-        initiateProgressDialogue();
-        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                dismissProgressDialogue();
-                ObjectMapper mapper = new ObjectMapper();
-                T t = null;
-                try {
-                    t = mapper.readValue(response.toString(), clazz);
-                    listener.onSuccess(t);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    listener.onError(e);
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                dismissProgressDialogue();
-
-
-                listener.onError(error);
-
-            }
-        });
-
-        VolleySingleton.getInstance(context).addToRequestQueue(r);
+//        setUrl(model.getPatchURL());
+        patch(clazz, requestObject, listener, false);
+//        initiateProgressDialogue();
+//        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                dismissProgressDialogue();
+//                ObjectMapper mapper = new ObjectMapper();
+//                T t = null;
+//                try {
+//                    t = mapper.readValue(response.toString(), clazz);
+//                    listener.onSuccess(t);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    listener.onError(e);
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//                dismissProgressDialogue();
+//
+//
+//                listener.onError(error);
+//
+//            }
+//        });
+//
+//        VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
     @Override
     public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
         setUrl(model.getPatchURL());
 
-        if (showLoadingDialogue)
-            initiateProgressDialogue();
-        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                if (showLoadingDialogue)
-                    dismissProgressDialogue();
-                ObjectMapper mapper = new ObjectMapper();
-                T t = null;
-                try {
-                    t = mapper.readValue(response.toString(), clazz);
-                    listener.onSuccess(t);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    listener.onError(e);
-                }
+//        if (showLoadingDialogue)
+//            initiateProgressDialogue();
+        PatchTask patchTask = new PatchTask(listener, clazz);
+        patchTask.execute(new String[]{model.getPatchURL(), requestObject.toString()});
+//        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                if (showLoadingDialogue)
+//                    dismissProgressDialogue();
+//                ObjectMapper mapper = new ObjectMapper();
+//                T t = null;
+//                try {
+//                    t = mapper.readValue(response.toString(), clazz);
+//                    listener.onSuccess(t);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    listener.onError(e);
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                if (showLoadingDialogue)
+//                    dismissProgressDialogue();
+//
+//
+//                listener.onError(error);
+//
+//            }
+//        });
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (showLoadingDialogue)
-                    dismissProgressDialogue();
-
-
-                listener.onError(error);
-
-            }
-        });
-
-        VolleySingleton.getInstance(context).addToRequestQueue(r);
+//        VolleySingleton.getInstance(context).addToRequestQueue(r);
     }
 
     @Override
