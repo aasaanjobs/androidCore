@@ -102,6 +102,43 @@ public interface CustomService extends BaseService {
     public <T> void add(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
+     * Put.
+     *
+     * @param <T>           the generic type
+     * @param clazz         the clazz
+     * @param requestObject the request object
+     * @param listener      the listener
+     */
+    public <T> void put(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener);
+
+    public <T> void put(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
+    /**
+     * Put.
+     *
+     * @param <T>           the generic type
+     * @param clazz         the clazz
+     * @param url           the url
+     * @param requestObject the request object
+     * @param listener      the listener
+     */
+    public <T> void put(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener);
+
+    public <T> void put(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
+    /**
+     * Put.
+     *
+     * @param <T>      the generic type
+     * @param c        the c
+     * @param request  the request
+     * @param listener the listener
+     */
+    public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener);
+
+    public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+
+    /**
      * Patch.
      *
      * @param <T>      the generic type

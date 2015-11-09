@@ -182,6 +182,60 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
         }
     }
 
+    @Override
+    public <T> void put(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener) {
+        try {
+            repository.put(clazz, requestObject, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void put(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.put(clazz, requestObject, listener, showLoadingDialogue);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void put(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener) {
+        try {
+            repository.put(clazz, url, requestObject, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void put(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.put(clazz, url, requestObject, listener, showLoadingDialogue);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener) {
+        try {
+            repository.put(c, request, listener);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
+    @Override
+    public <T> void put(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        try {
+            repository.put(c, request, listener, showLoadingDialogue);
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
     /* (non-Javadoc)
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#patch(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
