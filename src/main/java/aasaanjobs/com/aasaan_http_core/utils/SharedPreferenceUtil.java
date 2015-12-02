@@ -255,4 +255,8 @@ public class SharedPreferenceUtil {
     public void addToSharedPreference(Context ctx, String name, String key, String value) {
         context.getSharedPreferences(name, 0).edit().putString(key, value).commit();
     }
+
+    public void clearSharedPreference(String sharedPrefName,int mode){
+        context.getSharedPreferences(sharedPrefName,mode).edit().clear().commit();
+    }
 }
