@@ -240,11 +240,11 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#patch(java.lang.Class, java.lang.Object, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener) {
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener) {
 
         //  Volley.newRequestQueue(context.getApplicationContext(), new OkHttpStack()).add(request);
         try {
-            repository.patch(c, request, listener);
+            repository.patch(c, request,headers, listener);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -255,9 +255,9 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
     }
 
     @Override
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         try {
-            repository.patch(c, request, listener, showLoadingDialogue);
+            repository.patch(c, request,headers, listener, showLoadingDialogue);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -271,36 +271,36 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#patch(Class, JSONObject, CustomRepoListener)
      */
     @Override
-    public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener) {
+    public <T> void patch(Class<T> c, JSONObject request,HashMap<String,String> headers, CustomRepoListener<T> listener) {
         try {
-            repository.patch(c, request, listener);
+            repository.patch(c, request,headers, listener);
         } catch (Exception e) {
             listener.onError(e);
         }
     }
 
     @Override
-    public <T> void patch(Class<T> c, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+    public <T> void patch(Class<T> c, JSONObject request,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
         try {
-            repository.patch(c, request, listener, showLoadingDialogue);
+            repository.patch(c, request,headers, listener, showLoadingDialogue);
         } catch (Exception e) {
             listener.onError(e);
         }
     }
 
     @Override
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener) {
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener) {
         try {
-            repository.patch(c, request, listener);
+            repository.patch(c, request,headers, listener);
         } catch (Exception e) {
             listener.onError(e);
         }
     }
 
     @Override
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
         try {
-            repository.patch(c, request, listener, showLoadingDialogue);
+            repository.patch(c, request,headers, listener, showLoadingDialogue);
         } catch (Exception e) {
             listener.onError(e);
         }
@@ -399,18 +399,18 @@ public class CustomServiceImpl extends AbstractService implements CustomService 
      * @see aasaanjobs.com.aasaan_http_core.repositories.CustomService#uploadFile(java.lang.Class, java.io.File, java.lang.String, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
-    public <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener) {
-        repository.uploadFile(c, file, url, listener);
+    public <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener, int methodType) {
+        repository.uploadFile(c, file, url, listener, methodType);
     }
 
     @Override
-    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener) {
-        repository.uploadFile(c, file, params, url, listener);
+    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, int methodType) {
+        repository.uploadFile(c, file, params, url, listener, methodType);
     }
 
     @Override
-    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener) {
-        repository.uploadFile(c, file, params, url, listener, fileLength, progressListener);
+    public <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener, int methodType) {
+        repository.uploadFile(c, file, params, url, listener, fileLength, progressListener, methodType);
     }
 
     /* (non-Javadoc)

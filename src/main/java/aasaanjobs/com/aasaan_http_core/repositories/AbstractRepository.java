@@ -6,6 +6,8 @@ import android.content.Context;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListListener;
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
@@ -127,14 +129,14 @@ public abstract class AbstractRepository implements BaseRepository {
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, String, JSONObject, CustomRepoListener)
      */
     @Override
-    public <T> void patch(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener) {
-        patch(clazz, request, listener);
+    public <T> void patch(Class<T> clazz, String url, JSONObject request,HashMap<String,String> headers, CustomRepoListener<T> listener) {
+        patch(clazz, request,headers, listener);
 
     }
 
     @Override
-    public <T> void patch(Class<T> clazz, String url, JSONObject request, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
-        patch(clazz, request, listener, showLoadingDialogue);
+    public <T> void patch(Class<T> clazz, String url, JSONObject request,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue) {
+        patch(clazz, request,headers, listener, showLoadingDialogue);
     }
 
     /* (non-Javadoc)

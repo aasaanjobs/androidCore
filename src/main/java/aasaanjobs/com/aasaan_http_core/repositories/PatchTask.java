@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 
@@ -32,10 +33,12 @@ import aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener;
 public class PatchTask<T> extends AsyncTask<String, Void, T> {
 
     private final CustomRepoListener<T> customRepoListener;
+    private final HashMap<String, String> headers;
     private Class<T> clazz;
     private boolean isSuccesfull = false;
 
-    public PatchTask(CustomRepoListener repoListener, Class<T> clazz) {
+    public PatchTask(HashMap<String, String> headers, CustomRepoListener repoListener, Class<T> clazz) {
+        this.headers = headers;
         this.customRepoListener = repoListener;
         this.clazz = clazz;
     }
@@ -60,13 +63,18 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        final String user_name, api_key;
-        Uri uri = Uri.parse(url);
-        if (uri != null) {
-            user_name = uri.getQueryParameter("username");
-            api_key = uri.getQueryParameter("api_key");
-            if (user_name != null & api_key != null) {
-                httpPatch.setHeader("Authorization", "ApiKey " + user_name + ":" + api_key);
+//        final String user_name, api_key;
+//        Uri uri = Uri.parse(url);
+//        if (uri != null) {
+//            user_name = uri.getQueryParameter("username");
+//            api_key = uri.getQueryParameter("api_key");
+//            if (user_name != null & api_key != null) {
+//                httpPatch.setHeader("Authorization", "ApiKey " + user_name + ":" + api_key);
+//            }
+//        }
+        if(headers != null) {
+            for (HashMap.Entry<String,String> entry : headers.entrySet()) {
+                httpPatch.setHeader(entry.getKey(), entry.getValue());
             }
         }
         httpPatch.setEntity(se);

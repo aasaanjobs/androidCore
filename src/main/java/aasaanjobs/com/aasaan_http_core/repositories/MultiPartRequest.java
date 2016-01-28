@@ -86,8 +86,8 @@ public class MultiPartRequest extends Request<JSONObject> {
      */
     public MultiPartRequest(String url, Response.ErrorListener errorListener,
                             Response.Listener<JSONObject> listener, File file,
-                            Map<String, String> mStringPart) {
-        super(Method.POST, url, errorListener);
+                            Map<String, String> mStringPart, int methodType) {
+        super(methodType, url, errorListener);
 
         mListener = listener;
         mFilePart = file;
@@ -100,9 +100,9 @@ public class MultiPartRequest extends Request<JSONObject> {
 
     public MultiPartRequest(String url, Response.ErrorListener errorListener,
                             Response.Listener<JSONObject> listener, File file,
-                            Map<String, String> mStringPart, long fileLength, MultipartProgressListener progressListner) {
+                            Map<String, String> mStringPart, long fileLength, MultipartProgressListener progressListner, int methodType) {
 
-        super(Method.POST, url, errorListener);
+        super(methodType, url, errorListener);
 
         mListener = listener;
         mFilePart = file;

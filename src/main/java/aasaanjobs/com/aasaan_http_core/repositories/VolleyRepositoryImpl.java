@@ -503,9 +503,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 
 
     @Override
-    public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener) {
+    public <T> void patch(final Class<T> clazz, JSONObject requestObject,HashMap<String,String> headers, final CustomRepoListener<T> listener) {
 //        setUrl(model.getPatchURL());
-        patch(clazz, requestObject, listener, false);
+        patch(clazz, requestObject,headers, listener, false);
 //        initiateProgressDialogue();
 //        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
 //            @Override
@@ -538,12 +538,12 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T> void patch(final Class<T> clazz, JSONObject requestObject, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
+    public <T> void patch(final Class<T> clazz, JSONObject requestObject,HashMap<String,String> headers, final CustomRepoListener<T> listener, final boolean showLoadingDialogue) {
         setUrl(model.getPatchURL());
 
 //        if (showLoadingDialogue)
 //            initiateProgressDialogue();
-        PatchTask patchTask = new PatchTask(listener, clazz);
+        PatchTask patchTask = new PatchTask(headers,listener, clazz);
         patchTask.execute(new String[]{model.getPatchURL(), requestObject.toString()});
 //        CustomJsonObjectRequest r = new CustomJsonObjectRequest(Request.Method.PATCH, url, requestObject, new Response.Listener<JSONObject>() {
 //            @Override
@@ -577,9 +577,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener) {
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener) {
         try {
-            patch(c, getJSONFromObject(request), listener);
+            patch(c, getJSONFromObject(request),headers, listener);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -590,9 +590,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener, boolean showLoadingDialogue) {
         try {
-            patch(c, getJSONFromObject(request), listener, showLoadingDialogue);
+            patch(c, getJSONFromObject(request),headers, listener, showLoadingDialogue);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -607,9 +607,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#patch(Class, T, CustomRepoListener)
      */
     @Override
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener) {
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener) {
         try {
-            patch(c, getJSONFromObject(request), listener);
+            patch(c, getJSONFromObject(request),headers, listener);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -620,9 +620,9 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
     }
 
     @Override
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) throws IOException, JSONException {
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue) throws IOException, JSONException {
         try {
-            patch(c, getJSONFromObject(request), listener, showLoadingDialogue);
+            patch(c, getJSONFromObject(request),headers, listener, showLoadingDialogue);
         } catch (IOException e) {
             e.printStackTrace();
             listener.onError(e);
@@ -918,7 +918,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
      * @see aasaanjobs.com.aasaan_http_core.repositories.BaseRepository#uploadFile(java.lang.Class, java.io.File, java.lang.String, aasaanjobs.com.aasaan_http_core.utils.Listeners.CustomRepoListener)
      */
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, String url, final CustomRepoListener<T> listener) {
+    public <T> void uploadFile(final Class<T> c, File file, String url, final CustomRepoListener<T> listener, int methodType) {
 //        initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -933,13 +933,13 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 //                dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file, null);
+        }, file, null, methodType);
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
 
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener) {
+    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener, int methodType) {
         // initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -954,13 +954,13 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 //                dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file, params);
+        }, file, params, methodType);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }
 
     @Override
-    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener) {
+    public <T> void uploadFile(final Class<T> c, File file, HashMap<String, String> params, String url, final CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener, int methodType) {
         // initiateProgressDialogue();
         this.customRepoListener = listener;
         MultiPartRequest multiPartRequest = new MultiPartRequest(url, new Response.ErrorListener() {
@@ -975,7 +975,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
 //                dismissProgressDialogue();
                 sendResponse(response, c);
             }
-        }, file, params, fileLength, progressListener);
+        }, file, params, fileLength, progressListener, methodType);
 
         VolleySingleton.getInstance(context).addToRequestQueue(multiPartRequest);
     }

@@ -174,9 +174,9 @@ public interface BaseRepository {
      * @param requestObject the request object
      * @param listener      the listener
      */
-    public <T> void patch(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener);
+    public <T> void patch(Class<T> clazz, JSONObject requestObject,HashMap<String,String> headers, CustomRepoListener<T> listener);
 
-    public <T> void patch(Class<T> clazz, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+    public <T> void patch(Class<T> clazz, JSONObject requestObject,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
     /**
      * Patch.
@@ -187,13 +187,13 @@ public interface BaseRepository {
      * @param requestObject the request object
      * @param listener      the listener
      */
-    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener);
+    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject,HashMap<String,String> headers, CustomRepoListener<T> listener);
 
-    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject, CustomRepoListener<T> listener, boolean showLoadingDialogue);
+    public <T> void patch(Class<T> clazz, String url, JSONObject requestObject,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue);
 
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener);
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener);
 
-    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request, CustomRepoListener<P> listener, boolean showLoadingDialogue);
+    public <T extends BaseDO, P extends BaseResponseDO> void patch(Class<P> c, T request,HashMap<String,String> headers, CustomRepoListener<P> listener, boolean showLoadingDialogue);
 
     /**
      * Patch.
@@ -205,9 +205,9 @@ public interface BaseRepository {
      * @throws IOException   Signals that an I/O exception has occurred.
      * @throws JSONException the JSON exception
      */
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener) throws IOException, JSONException;
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener) throws IOException, JSONException;
 
-    public <T> void patch(Class<T> c, T request, CustomRepoListener<T> listener, boolean showLoadingDialogue) throws IOException, JSONException;
+    public <T> void patch(Class<T> c, T request,HashMap<String,String> headers, CustomRepoListener<T> listener, boolean showLoadingDialogue) throws IOException, JSONException;
 
     /**
      * Delete.
@@ -384,11 +384,11 @@ public interface BaseRepository {
      * @param url      the url
      * @param listener the listener
      */
-    <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener);
+    <T> void uploadFile(Class<T> c, File file, String url, CustomRepoListener<T> listener, int methodType);
 
-    <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener);
+    <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, int methodType);
 
-    <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener);
+    <T> void uploadFile(Class<T> c, File file, HashMap<String, String> params, String url, CustomRepoListener<T> listener, long fileLength, MultiPartRequest.MultipartProgressListener progressListener, int methodType);
 
     /**
      * Download file.
