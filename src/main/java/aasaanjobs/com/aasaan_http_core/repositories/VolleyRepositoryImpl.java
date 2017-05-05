@@ -77,7 +77,7 @@ class VolleyRepositoryImpl<T extends BaseDO> extends AbstractCustomRepository im
         url = "";
         this.model = model;
 
-        HttpsTrustManager.allowAllSSL();
+//        HttpsTrustManager.allowAllSSL();
 
     }
 

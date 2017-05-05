@@ -46,8 +46,7 @@ public class VolleySingleton {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
-        mImageLoader = new ImageLoader(mRequestQueue,
-                new ImageLoader.ImageCache() {
+        mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
                             cache = new LruCache<String, Bitmap>(20);
 
@@ -89,7 +88,8 @@ public class VolleySingleton {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+            OkhttpUrlStack urlStack = new OkhttpUrlStack();
+            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext(),urlStack);
         }
         return mRequestQueue;
     }

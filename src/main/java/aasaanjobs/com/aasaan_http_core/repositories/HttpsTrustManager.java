@@ -32,15 +32,15 @@ public class HttpsTrustManager implements X509TrustManager {
 
             @Override
             public boolean verify(String hostName, SSLSession arg1) {
-                return (hostName.equalsIgnoreCase("api.aasaanjobs.com")
-                        || hostName.equalsIgnoreCase("maps.googleapis.com")
-                        || hostName.equalsIgnoreCase("wzrkt.com")
-                        || hostName.equalsIgnoreCase("static.aasaanjobs.com")
-                        || hostName.equalsIgnoreCase("api.branch.io")
-                        || hostName.equalsIgnoreCase("s3-ap-southeast-1.amazonaws.com")
-                        || hostName.equalsIgnoreCase("graph.facebook.com"))
-                        && arg1.isValid();
-
+//                return (hostName.equalsIgnoreCase("api.aasaanjobs.com")
+//                        || hostName.equalsIgnoreCase("maps.googleapis.com")
+//                        || hostName.equalsIgnoreCase("wzrkt.com")
+//                        || hostName.equalsIgnoreCase("static.aasaanjobs.com")
+//                        || hostName.equalsIgnoreCase("api.branch.io")
+//                        || hostName.equalsIgnoreCase("s3-ap-southeast-1.amazonaws.com")
+//                        || hostName.equalsIgnoreCase("graph.facebook.com"))
+//                        && arg1.isValid();
+                  return false;
             }
 
         });
