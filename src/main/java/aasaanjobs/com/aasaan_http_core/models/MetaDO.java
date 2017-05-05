@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class MetaDO {
     
     /** The total_count. */
-    protected String limit, next, offset, previous, total_count;
+    protected String limit, next, offset, previous, count;
 
     /**
      * Gets the limit.
@@ -84,21 +84,11 @@ public class MetaDO {
         this.previous = previous;
     }
 
-    /**
-     * Gets the total_count.
-     *
-     * @return the total_count
-     */
-    public String getTotal_count() {
-        return total_count;
+    public String getCount() {
+        return count;
     }
 
-    /**
-     * Sets the total_count.
-     *
-     * @param total_count the new total_count
-     */
-    public void setTotal_count(String total_count) {
-        this.total_count = total_count;
+    public void setCount(String count) {
+        this.count = count;
     }
 }

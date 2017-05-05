@@ -37,6 +37,7 @@ public class HttpsTrustManager implements X509TrustManager {
                         || hostName.equalsIgnoreCase("wzrkt.com")
                         || hostName.equalsIgnoreCase("static.aasaanjobs.com")
                         || hostName.equalsIgnoreCase("api.branch.io")
+                        || hostName.equalsIgnoreCase("s3-ap-southeast-1.amazonaws.com")
                         || hostName.equalsIgnoreCase("graph.facebook.com"))
                         && arg1.isValid();
 

@@ -41,6 +41,7 @@ public class PatchTask<T> extends AsyncTask<String, Void, T> {
         this.headers = headers;
         this.customRepoListener = repoListener;
         this.clazz = clazz;
+        HttpsTrustManager.allowAllSSL();
     }
 
     @Override
